@@ -53,274 +53,148 @@ export default function LeetCodeSubmissionModal({ submission, onClose, onUpdate 
     }
   };
 
-  const CheckboxItem = ({
-    label,
-    remarkType,
-    description,
-  }: {
-    label: string;
-    remarkType: keyof Submission['remarks'];
-    description: string;
-  }) => {
-    const isChecked = submission.remarks[remarkType];
-    const loadingKey = `${submission._id}-${remarkType}`;
-    const isLoading = loadingRemarks[loadingKey];
 
-    return (
-      <label className="relative flex items-start gap-4 rounded-2xl border border-gray-600/40 bg-gray-800/60 p-5 shadow-inner shadow-black/20 transition hover:border-blue-500/40">
-        <div className="relative flex h-6 w-6 items-center justify-center">
-          <input
-            type="checkbox"
-            checked={isChecked}
-            onChange={() => handleRemarkToggle(remarkType, isChecked)}
-            disabled={isLoading}
-            className="peer absolute h-6 w-6 cursor-pointer appearance-none rounded-md border border-gray-500 bg-gray-900 checked:border-transparent checked:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/60 disabled:cursor-not-allowed"
-          />
-          <svg
-            className="pointer-events-none z-[1] h-3.5 w-3.5 text-white opacity-0 transition peer-checked:opacity-100"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              fillRule="evenodd"
-              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-              clipRule="evenodd"
-            />
-          </svg>
-          {isLoading && (
-            <span className="absolute inset-0 flex items-center justify-center rounded-md bg-blue-500/20">
-              <span className="h-3 w-3 animate-spin rounded-full border border-white/50 border-t-transparent" />
-            </span>
-          )}
-        </div>
-        <span className="flex-1">
-          <span className="text-base font-semibold text-white">{label}</span>
-          <p className="mt-1 text-sm text-gray-400">{description}</p>
-        </span>
-      </label>
-    );
-  };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6 backdrop-blur">
-      <div className="relative flex h-full w-full max-h-[92vh] max-w-[90vw] flex-col overflow-hidden rounded-3xl border border-gray-700/60 bg-gray-900/95 shadow-[0_40px_120px_-50px_rgba(59,130,246,0.75)]">
-        <div className="flex items-start justify-between gap-6 border-b border-gray-800/70 px-8 py-6">
-          <div className="space-y-3">
-            <div className="flex flex-wrap items-center gap-4">
-              <span className="rounded-full border border-blue-500/40 bg-blue-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-300">
-                {submission.platform}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur">
+      <div className="relative flex h-full w-full max-h-[85vh] max-w-4xl flex-col overflow-hidden rounded-2xl border border-gray-700/60 bg-gray-900/95 shadow-2xl">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-4 border-b border-gray-800/70 px-6 py-4">
+          <div className="space-y-2">
+            <h2 className="text-xl font-bold text-white">{submission.title}</h2>
+            <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400">
+              <span>Platform: {submission.platform}</span>
+              <span>Q.No: {submission.questionDetails.questionNo || 'N/A'}</span>
+              <span>
+                Added on: {submission.questionDetails.timestamp
+                  ? new Date(submission.questionDetails.timestamp).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })
+                  : 'N/A'}
               </span>
-              <span className={`rounded-full px-4 py-1 text-sm font-semibold ${getDifficultyBadgeClass(submission.questionDetails.difficulty)}`}>
+              <span className={`px-2 py-1 rounded text-xs font-medium ${getDifficultyBadgeClass(submission.questionDetails.difficulty)}`}>
                 {submission.questionDetails.difficulty}
               </span>
-              <span className="text-sm text-gray-400">
-                {submission.questionDetails.questionNo ? `#${submission.questionDetails.questionNo}` : 'Unnumbered'}
-              </span>
             </div>
-            <h2 className="text-3xl font-bold leading-tight text-white">{submission.title}</h2>
-            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
+            <div className="flex items-center gap-4 text-xs text-gray-400">
               <a
                 href={submission.questionDetails.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-gray-700/60 bg-gray-800/70 px-4 py-1.5 text-blue-300 transition hover:border-blue-500/40 hover:text-blue-200"
+                className="inline-flex items-center gap-1 text-blue-300 hover:text-blue-200"
               >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 3h7m0 0v7m0-7L10 14" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 5l5.586-5.586A2 2 0 0112.414 0H19a2 2 0 012 2v6.586a2 2 0 01-.586 1.414L15 15" />
                 </svg>
                 View on platform
               </a>
-              <span>
-                Added{' '}
-                {submission.questionDetails.timestamp
-                  ? new Date(submission.questionDetails.timestamp).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })
-                  : 'Not specified'}
-              </span>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="rounded-2xl border border-gray-700/70 bg-gray-800/60 p-2 text-gray-400 transition hover:border-gray-600 hover:text-white"
+            className="rounded-lg border border-gray-700/70 bg-gray-800/60 p-1.5 text-gray-400 transition hover:border-gray-600 hover:text-white"
           >
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-8 py-6">
-          <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-            <section className="space-y-6">
-              <div className="grid gap-4 rounded-2xl border border-gray-700/60 bg-gray-800/60 p-6 sm:grid-cols-3">
-                <article className="rounded-xl border border-gray-700/40 bg-gray-900/60 p-5 text-center shadow-inner shadow-black/20">
-                  <span className="text-xs font-semibold uppercase tracking-wide text-gray-400">Passed Attempts</span>
-                  <p className="mt-3 text-4xl font-bold text-emerald-300">{submission.passedAttempts || 0}</p>
-                </article>
-                <article className="rounded-xl border border-gray-700/40 bg-gray-900/60 p-5 text-center shadow-inner shadow-black/20">
-                  <span className="text-xs font-semibold uppercase tracking-wide text-gray-400">Failed Attempts</span>
-                  <p className="mt-3 text-4xl font-bold text-rose-300">{submission.failedAttempts || 0}</p>
-                </article>
-                <article className="rounded-xl border border-gray-700/40 bg-gray-900/60 p-5 text-center shadow-inner shadow-black/20">
-                  <span className="text-xs font-semibold uppercase tracking-wide text-gray-400">Solve Time (min)</span>
-                  <input
-                    type="number"
-                    min={0}
-                    defaultValue={submission.solveTime ?? ''}
-                    className="mt-3 w-full rounded-lg border border-gray-700/60 bg-gray-800/70 px-3 py-2 text-center text-lg font-semibold text-blue-200 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
-                    placeholder="0"
-                  />
-                </article>
-              </div>
+        {/* Main Content */}
+        <div className="flex-1 overflow-y-auto px-6 py-4">
+          <div className="space-y-6">
+            {/* Solve Time */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-400">Solve Time (minutes)</label>
+              <input
+                type="number"
+                min={0}
+                defaultValue={submission.solveTime ?? ''}
+                className="w-full rounded-lg border border-gray-700/60 bg-gray-800/70 px-3 py-2 text-sm text-gray-200 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                placeholder="Enter solve time in minutes"
+              />
+            </div>
 
-              <div className="space-y-5 rounded-2xl border border-gray-700/60 bg-gray-800/60 p-6">
-                <h3 className="text-xl font-semibold text-white">Question Details</h3>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-1">
-                    <span className="text-xs font-semibold uppercase tracking-wide text-gray-400">Question No.</span>
-                    <p className="rounded-lg border border-gray-700/50 bg-gray-900/70 px-3 py-2 font-mono text-sm text-gray-200">
-                      {submission.questionDetails.questionNo || 'N/A'}
-                    </p>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-xs font-semibold uppercase tracking-wide text-gray-400">Platform</span>
-                    <p className="rounded-lg border border-gray-700/50 bg-gray-900/70 px-3 py-2 text-sm capitalize text-gray-200">
-                      {submission.platform}
-                    </p>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-xs font-semibold uppercase tracking-wide text-gray-400">Language Used</span>
-                    <p className="rounded-lg border border-gray-700/50 bg-gray-900/70 px-3 py-2 text-sm text-gray-200">
-                      {submission.lang}
-                    </p>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-xs font-semibold uppercase tracking-wide text-gray-400">Added On</span>
-                    <p className="rounded-lg border border-gray-700/50 bg-gray-900/70 px-3 py-2 text-sm text-gray-200">
-                      {submission.questionDetails.timestamp
-                        ? new Date(submission.questionDetails.timestamp).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                          })
-                        : 'Not specified'}
-                    </p>
-                  </div>
-                  <div className="space-y-1 sm:col-span-2">
-                    <span className="text-xs font-semibold uppercase tracking-wide text-gray-400">Question Link</span>
-                    <a
-                      href={submission.questionDetails.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex w-full items-center justify-between rounded-lg border border-blue-500/30 bg-blue-500/10 px-4 py-2 text-sm text-blue-200 transition hover:border-blue-400 hover:text-blue-100"
-                    >
-                      <span className="truncate">{submission.questionDetails.link}</span>
-                      <svg className="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 3h7m0 0v7m0-7L10 14" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 5l5.586-5.586A2 2 0 0112.414 0H19a2 2 0 012 2v6.586a2 2 0 01-.586 1.414L15 15" />
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-              </div>
+            {/* Approach */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-400">Approach</label>
+              <textarea
+                className="h-28 w-full resize-none rounded-lg border border-gray-700/50 bg-gray-800/70 px-3 py-2 text-sm text-gray-200 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                placeholder="Describe your approach, algorithm, or thought process..."
+                defaultValue={formatMultiline(submission.approach)}
+              />
+            </div>
 
-              <div className="space-y-5 rounded-2xl border border-gray-700/60 bg-gray-800/60 p-6">
-                <h3 className="text-xl font-semibold text-white">Problem Log</h3>
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-400">Approach</label>
-                    <textarea
-                      className="h-32 w-full resize-none rounded-xl border border-gray-700/50 bg-gray-900/70 px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20"
-                      placeholder="Describe your approach, algorithm, or thought process..."
-                      defaultValue={formatMultiline(submission.approach)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-400">Notes</label>
-                    <textarea
-                      className="h-28 w-full resize-none rounded-xl border border-gray-700/50 bg-gray-900/70 px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20"
-                      placeholder="Add reminders or insights for next time..."
-                      defaultValue={formatMultiline(submission.notes)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-400">Detailed Description</label>
-                    <textarea
-                      className="h-32 w-full resize-none rounded-xl border border-gray-700/50 bg-gray-900/70 px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20"
-                      placeholder="Capture a deeper write-up or breakdown of the solution."
-                      defaultValue={formatMultiline(submission.description)}
-                    />
-                  </div>
-                </div>
-              </div>
-            </section>
+            {/* Notes */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-400">Notes</label>
+              <textarea
+                className="h-24 w-full resize-none rounded-lg border border-gray-700/50 bg-gray-800/70 px-3 py-2 text-sm text-gray-200 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                placeholder="Add reminders or insights for next time..."
+                defaultValue={formatMultiline(submission.notes)}
+              />
+            </div>
 
-            <section className="space-y-6">
-              <div className="space-y-4 rounded-2xl border border-gray-700/60 bg-gray-800/60 p-6">
-                <h3 className="text-xl font-semibold text-white">Status & Trackers</h3>
-                <div className="space-y-3">
-                  <CheckboxItem
-                    label="Can Do Better"
-                    remarkType="canDoBetter"
-                    description="This solution can be improved or optimized further."
-                  />
-                  <CheckboxItem
-                    label="Saw Solution / Editorial"
-                    remarkType="sawSolution"
-                    description="Marked when you relied on hints or external solutions."
-                  />
-                  <CheckboxItem
-                    label="Need Working On"
-                    remarkType="needWorking"
-                    description="Revisit this problem or practice similar patterns."
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-4 rounded-2xl border border-gray-700/60 bg-gray-800/60 p-6">
-                <h3 className="text-xl font-semibold text-white">Quick Stats</h3>
-                <div className="space-y-3 text-sm text-gray-300">
-                  <div className="flex items-center justify-between rounded-xl border border-gray-700/50 bg-gray-900/70 px-4 py-3">
-                    <span>Total Attempts</span>
-                    <span className="font-semibold text-gray-100">
-                      {(submission.passedAttempts || 0) + (submission.failedAttempts || 0)}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between rounded-xl border border-gray-700/50 bg-gray-900/70 px-4 py-3">
-                    <span>Overall Status</span>
-                    <span className={(submission.passedAttempts || 0) > 0 ? 'font-semibold text-emerald-300' : 'font-semibold text-gray-100'}>
-                      {(submission.passedAttempts || 0) > 0 ? 'Solved' : 'Not Solved'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </section>
+            {/* Detailed Description */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-400">Detailed Description</label>
+              <textarea
+                className="h-28 w-full resize-none rounded-lg border border-gray-700/50 bg-gray-800/70 px-3 py-2 text-sm text-gray-200 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                placeholder="Capture a deeper write-up or breakdown of the solution..."
+                defaultValue={formatMultiline(submission.description)}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-4 border-t border-gray-800/70 px-8 py-5">
-          <div className="flex items-center gap-3 text-sm text-gray-400">
-            <span
-              className={`inline-flex h-3 w-3 rounded-full ${
-                (submission.passedAttempts || 0) > 0 ? 'bg-emerald-400' : 'bg-gray-500'
-              }`}
-            />
-            <span>{(submission.passedAttempts || 0) > 0 ? 'Solved on platform' : 'Pending solution'}</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={onClose}
-              className="rounded-xl border border-gray-700/70 px-5 py-2 text-sm font-medium text-gray-300 transition hover:border-gray-600 hover:text-white"
-            >
-              Close
-            </button>
-            <button className="rounded-xl bg-blue-500 px-6 py-2 text-sm font-semibold text-white transition hover:bg-blue-600">
-              Save Changes
-            </button>
+        {/* Bottom Checkboxes */}
+        <div className="border-t border-gray-800/70 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6">
+              <label className="flex items-center gap-2 text-xs text-gray-400 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={submission.remarks.canDoBetter}
+                  onChange={() => handleRemarkToggle('canDoBetter', submission.remarks.canDoBetter)}
+                  disabled={loadingRemarks[`${submission._id}-canDoBetter`]}
+                  className="rounded border-gray-500 bg-gray-800 text-blue-500 focus:ring-blue-500/20"
+                />
+                Can Do Better
+              </label>
+              <label className="flex items-center gap-2 text-xs text-gray-400 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={submission.remarks.sawSolution}
+                  onChange={() => handleRemarkToggle('sawSolution', submission.remarks.sawSolution)}
+                  disabled={loadingRemarks[`${submission._id}-sawSolution`]}
+                  className="rounded border-gray-500 bg-gray-800 text-blue-500 focus:ring-blue-500/20"
+                />
+                Saw Solution
+              </label>
+              <label className="flex items-center gap-2 text-xs text-gray-400 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={submission.remarks.needWorking}
+                  onChange={() => handleRemarkToggle('needWorking', submission.remarks.needWorking)}
+                  disabled={loadingRemarks[`${submission._id}-needWorking`]}
+                  className="rounded border-gray-500 bg-gray-800 text-blue-500 focus:ring-blue-500/20"
+                />
+                Need Working On
+              </label>
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={onClose}
+                className="rounded-lg border border-gray-700/70 px-4 py-2 text-xs font-medium text-gray-300 transition hover:border-gray-600 hover:text-white"
+              >
+                Close
+              </button>
+              <button className="rounded-lg bg-blue-500 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-600">
+                Save
+              </button>
+            </div>
           </div>
         </div>
       </div>

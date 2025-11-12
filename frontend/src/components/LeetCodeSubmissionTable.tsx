@@ -26,19 +26,19 @@ function useDebounce<T>(value: T, delay: number): T {
 interface LeetCodeSubmissionTableProps {
   submissions: Submission[];
   onSubmissionUpdate: (updatedSubmission: Submission) => void;
-  onLoadMoreBase: () => Promise<void> | void;
-  hasMoreBase: boolean;
-  loadingMoreBase: boolean;
-  pageSize: number;
+  onLoadMoreBase?: () => Promise<void> | void;
+  hasMoreBase?: boolean;
+  loadingMoreBase?: boolean;
+  pageSize?: number;
 }
 
 export default function LeetCodeSubmissionTable({
   submissions,
   onSubmissionUpdate,
-  onLoadMoreBase,
-  hasMoreBase,
-  loadingMoreBase,
-  pageSize,
+  onLoadMoreBase = () => {},
+  hasMoreBase = false,
+  loadingMoreBase = false,
+  pageSize = 20,
 }: LeetCodeSubmissionTableProps) {
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
