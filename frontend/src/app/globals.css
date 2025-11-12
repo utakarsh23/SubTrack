@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+/* CSS Reset */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+/* Root variables for LeetCode theme */
+:root {
+  --leetcode-easy: #00B8A3;
+  --leetcode-medium: #FFB800;
+  --leetcode-hard: #FF4D4F;
+  --leetcode-bg-primary: #0f0f0f;
+  --leetcode-bg-secondary: #1a1a1a;
+  --leetcode-bg-tertiary: #262626;
+  --leetcode-text-primary: #ffffff;
+  --leetcode-text-secondary: #a3a3a3;
+  --leetcode-text-tertiary: #737373;
+  --leetcode-border: #404040;
+  --leetcode-hover: rgba(255, 255, 255, 0.05);
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+/* Code/monospace font settings */
+.font-mono, pre, code, textarea {
+  font-family: 'SF Mono', Monaco, 'Inconsolata', 'Roboto Mono', 'Source Code Pro', monospace;
+  font-feature-settings: 'liga' 0, 'calt' 0;
+}
+
+/* LeetCode-style custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--leetcode-bg-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #404040;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #525252;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--leetcode-bg-secondary);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #404040 var(--leetcode-bg-secondary);
+}
+
+
+
+
