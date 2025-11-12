@@ -127,6 +127,17 @@ class ApiClient {
     return this.request('/user/profile');
   }
 
+  async updateUserPlatforms(platforms: {
+    leetcodeUsername?: string;
+    codeChef?: string;
+    codeForces?: string;
+  }): Promise<{ message: string }> {
+    return this.request('/user/add/platform', {
+      method: 'POST',
+      body: JSON.stringify({ platforms }),
+    });
+  }
+
   // Token management
   setAuthToken(token: string): void {
     if (typeof window !== 'undefined') {

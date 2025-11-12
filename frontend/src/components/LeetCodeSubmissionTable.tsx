@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Submission } from '@/types/submission';
 import { useAuth } from '@/contexts/AuthContext';
 import LeetCodeSubmissionModal from './LeetCodeSubmissionModal';
@@ -42,6 +43,7 @@ export default function LeetCodeSubmissionTable({
 }: LeetCodeSubmissionTableProps) {
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchActive, setSearchActive] = useState(false);
   const [difficultyFilter, setDifficultyFilter] = useState<'all' | 'Easy' | 'Medium' | 'Hard'>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'solved' | 'attempted'>('all');
   
@@ -57,7 +59,8 @@ export default function LeetCodeSubmissionTable({
   const [searchLoadingMore, setSearchLoadingMore] = useState(false);
   const loadMoreTriggerRef = useRef<HTMLDivElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
-  const { logout, user } = useAuth();
+  const { user } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     setDisplaySubmissions(prev => {
@@ -357,20 +360,36 @@ export default function LeetCodeSubmissionTable({
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <h1 className="text-2xl font-semibold text-white">Problems</h1>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
-              <div className="relative w-full max-w-xl">
-                <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center">
-                  <svg className="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <div className="relative flex items-center">
+                <button
+                  onClick={() => setSearchActive((prev) => !prev)}
+                  className="flex items-center justify-center w-10 h-10 bg-gray-950 border border-gray-800 rounded-2xl hover:bg-gray-900 transition-all duration-200"
+                >
+                  <svg
+                    className="w-5 h-5 text-gray-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
                   </svg>
-                </div>
+                </button>
                 <input
+                  type="text"
                   value={searchQuery}
-                  onChange={(event) => setSearchQuery(event.target.value)}
-                  placeholder="Search questions"
-                  className="h-12 w-full rounded-2xl border border-gray-800 bg-gray-950 pl-12 pr-10 text-sm font-medium text-gray-200 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search..."
+                  className={`ml-2 h-10 w-0 opacity-0 rounded-2xl border border-gray-800 bg-gray-950 text-sm font-medium text-gray-200 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all duration-300 ease-in-out ${
+                    searchActive ? 'w-56 opacity-100 pl-4 pr-3' : 'w-0 opacity-0'
+                  }`}
                 />
                 {((isFetching && remoteSearchActive) || (searchQuery !== debouncedSearchQuery && searchQuery.trim() !== '')) && (
-                  <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center">
+                  <div className="absolute right-4 flex items-center">
                     <span className="h-4 w-4 animate-spin rounded-full border border-gray-500 border-t-transparent" />
                   </div>
                 )}
@@ -382,22 +401,31 @@ export default function LeetCodeSubmissionTable({
                   <span>{totalQuestions}</span>
                   <span className="ml-2 text-gray-500">Solved</span>
             </div>
-                <button
-                  onClick={logout}
-                  className="inline-flex items-center justify-center rounded-2xl border border-gray-800 bg-gray-950 px-4 py-2 text-sm font-medium text-blue-400 transition hover:text-blue-300 lg:hidden"
-                >
-                  Logout
-                </button>
-                <div className="hidden items-center gap-3 rounded-2xl border border-gray-800 bg-gray-950 px-4 py-2 lg:flex">
-                  <span className="text-gray-500">Welcome,</span>
+                <div className="flex items-center gap-3 lg:hidden">
+                  <button
+                    onClick={() => router.push('/profile')}
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                    title={`Go to ${user?.username ?? 'User'} profile`}
+                  >
+                    {user?.username 
+                      ? user.username.split(' ').map(name => name.charAt(0).toUpperCase()).join('').substring(0, 2)
+                      : 'U'
+                    }
+                  </button>
+                  <span className="font-medium text-gray-200 text-sm">{user?.username ?? 'Anonymous'}</span>
+                </div>
+                <div className="hidden items-center gap-3 lg:flex">
+                  <button
+                    onClick={() => router.push('/profile')}
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                    title={`Go to ${user?.username ?? 'User'} profile`}
+                  >
+                    {user?.username 
+                      ? user.username.split(' ').map(name => name.charAt(0).toUpperCase()).join('').substring(0, 2)
+                      : 'U'
+                    }
+                  </button>
                   <span className="font-medium text-gray-200">{user?.username ?? 'Anonymous'}</span>
-                  <span className="h-4 w-px bg-gray-700" />
-              <button
-                onClick={logout}
-                    className="text-sm font-medium text-blue-400 transition hover:text-blue-300"
-              >
-                Logout
-              </button>
                 </div>
               </div>
             </div>

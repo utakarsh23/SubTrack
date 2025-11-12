@@ -174,152 +174,169 @@ export default function LeetCodeSubmissionModal({ submission, onClose, onUpdate 
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 overflow-y-auto px-10 py-8">
-          <div className="max-w-3xl mx-auto space-y-8 flex flex-col items-center">
+        <div className="flex-1 overflow-y-auto py-8">
+          <div className="mx-auto flex flex-col items-center">
             {/* Solve Time and Stats Row */}
-            <div className="flex gap-8 items-end justify-center w-full">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-400 block text-center">Solve Time (min)</label>
-                <input
-                  type="number"
-                  min={0}
-                  value={solveTime}
-                  onChange={(e) => setSolveTime(e.target.value)}
-                  className="w-24 rounded-xl border border-gray-700/60 bg-gray-800/70 px-3 py-2 text-sm text-gray-200 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 text-center"
-                  placeholder="0"
-                />
+            <div className="w-full max-w-2xl bg-gray-800/40 rounded-2xl p-6 border border-gray-700/40">
+              <div className="text-center mb-6">
+                <h3 className="text-lg font-medium text-gray-300 mb-1">Attempt Statistics</h3>
               </div>
-              <div className="flex gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-400 block text-center">Passed</label>
-                  <div className="w-20 rounded-xl border border-gray-700/50 bg-gray-800/50 px-3 py-2 text-sm text-emerald-300 font-semibold text-center">
-                    {submission.passedAttempts || 0}
-                  </div>
+              
+              <div className="flex gap-8 items-center justify-center">
+                <div className="space-y-3 text-center">
+                  <label className="text-sm font-medium text-gray-400 block">Solve Time (min)</label>
+                  <input
+                    type="number"
+                    min={0}
+                    value={solveTime}
+                    onChange={(e) => setSolveTime(e.target.value)}
+                    className="w-28 rounded-xl border border-gray-600/60 bg-gray-700/70 px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 text-center font-medium"
+                    placeholder="0"
+                  />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-400 block text-center">Failed</label>
-                  <div className="w-20 rounded-xl border border-gray-700/50 bg-gray-800/50 px-3 py-2 text-sm text-red-300 font-semibold text-center">
-                    {submission.failedAttempts || 0}
+                
+                <div className="w-px h-16 bg-gray-600/50"></div>
+                
+                <div className="flex gap-8">
+                  <div className="space-y-3 text-center">
+                    <label className="text-sm font-medium text-gray-400 block">Passed</label>
+                    <div className="w-24 rounded-xl border border-emerald-600/40 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300 font-semibold text-center">
+                      {submission.passedAttempts || 0}
+                    </div>
+                  </div>
+                  <div className="space-y-3 text-center">
+                    <label className="text-sm font-medium text-gray-400 block">Failed</label>
+                    <div className="w-24 rounded-xl border border-red-600/40 bg-red-500/10 px-4 py-3 text-sm text-red-300 font-semibold text-center">
+                      {submission.failedAttempts || 0}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Approach */}
-            {/* Approach */}
-            <div className="space-y-3 w-full max-w-2xl">
-              <label className="text-sm font-medium text-gray-400 text-center block">Approach</label>
+            <div className="space-y-4 w-full flex flex-col items-center">
+              <div className="text-center">
+                <h3 className="text-lg font-medium text-gray-300 mb-1">Approach & Algorithm</h3>
+                <p className="text-sm text-gray-500">Add the approaches or algorithms you used to solve this problem</p>
+              </div>
               
               {/* Combined approach field with bubbles inside */}
-              <div className="min-h-[100px] rounded-xl border border-gray-700/50 bg-gray-800/70 p-4 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20">
+              <div className="w-full max-w-2xl min-h-[120px] rounded-xl border border-gray-700/50 bg-gray-800/70 p-4 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20">
                 {/* Existing approach bubbles */}
-                <div className="flex flex-wrap gap-3 mb-3">
-                  {approachItems.map((item, index) => (
-                    <div key={index} className="inline-flex items-center gap-3 bg-blue-500/20 border border-blue-500/30 rounded-full px-4 py-2 text-sm text-blue-200">
-                      <span>{item}</span>
-                      <button
-                        onClick={() => removeApproachItem(index)}
-                        className="text-blue-300 hover:text-red-300 transition-colors"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-                  ))}
-                </div>
+                {approachItems.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4 justify-center">
+                    {approachItems.map((item, index) => (
+                      <div key={index} className="inline-flex items-center gap-1 bg-blue-500/20 border border-blue-500/30 rounded-full px-3 py-1.5 text-sm text-blue-200">
+                        <span>{item}</span>
+                        <button
+                          onClick={() => removeApproachItem(index)}
+                          className="text-blue-300 hover:text-red-300 transition-colors"
+                        >
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 
                 {/* Add new approach */}
-                <div className="flex gap-3">
-                  <input
-                    type="text"
-                    value={newApproachItem}
-                    onChange={(e) => setNewApproachItem(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && addApproachItem()}
-                    className="flex-1 bg-transparent border-none outline-none text-sm text-gray-200 placeholder:text-gray-500"
-                    placeholder="Add approach or algorithm..."
-                  />
-                  <button
-                    onClick={addApproachItem}
-                    className="px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-200 text-sm hover:bg-blue-500/30 transition-colors"
-                  >
-                    Add
-                  </button>
+                <div className="flex gap-3 items-center justify-center">
+                  <div className="flex-1 flex justify-center">
+                    <input
+                      type="text"
+                      value={newApproachItem}
+                      onChange={(e) => setNewApproachItem(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && addApproachItem()}
+                      className="w-full max-w-md bg-transparent border-none outline-none text-sm text-gray-200 placeholder:text-gray-500 text-center"
+                      placeholder="Type approach here..."
+                    />
+                  </div>
+              
                 </div>
               </div>
             </div>            {/* Notes */}
-            <div className="space-y-3 w-full max-w-2xl">
-              <label className="text-sm font-medium text-gray-400 text-center block">Notes</label>
+            <div className="space-y-4 w-full flex flex-col items-center">
+              <div className="text-center">
+                <h3 className="text-lg font-medium text-gray-300 mb-1">Notes & Insights</h3>
+                <p className="text-sm text-gray-500">Add important notes or insights about this problem</p>
+              </div>
               
               {/* Combined notes field with bubbles inside */}
-              <div className="min-h-[100px] rounded-xl border border-gray-700/50 bg-gray-800/70 p-4 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20">
+              <div className="w-full max-w-2xl min-h-[120px] rounded-xl border border-gray-700/50 bg-gray-800/70 p-4 focus-within:border-green-500 focus-within:ring-2 focus-within:ring-green-500/20">
                 {/* Existing notes bubbles */}
-                <div className="flex flex-wrap gap-3 mb-3">
-                  {notesItems.map((item, index) => (
-                    <div key={index} className="inline-flex items-center gap-3 bg-green-500/20 border border-green-500/30 rounded-full px-4 py-2 text-sm text-green-200">
-                      <span>{item}</span>
-                      <button
-                        onClick={() => removeNotesItem(index)}
-                        className="text-green-300 hover:text-red-300 transition-colors"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-                  ))}
-                </div>
+                {notesItems.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4 justify-center">
+                    {notesItems.map((item, index) => (
+                      <div key={index} className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/30 rounded-full px-3 py-1.5 text-sm text-green-200">
+                        <span>{item}</span>
+                        <button
+                          onClick={() => removeNotesItem(index)}
+                          className="text-green-300 hover:text-red-300 transition-colors"
+                        >
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 
                 {/* Add new note */}
-                <div className="flex gap-3">
-                  <input
-                    type="text"
-                    value={newNotesItem}
-                    onChange={(e) => setNewNotesItem(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && addNotesItem()}
-                    className="flex-1 bg-transparent border-none outline-none text-sm text-gray-200 placeholder:text-gray-500"
-                    placeholder="Add note or insight..."
-                  />
-                  <button
-                    onClick={addNotesItem}
-                    className="px-4 py-2 rounded-lg bg-green-500/20 border border-green-500/30 text-green-200 text-sm hover:bg-green-500/30 transition-colors"
-                  >
-                    Add
-                  </button>
+                <div className="flex gap-3 items-center justify-center">
+                  <div className="flex-1 flex justify-center">
+                    <input
+                      type="text"
+                      value={newNotesItem}
+                      onChange={(e) => setNewNotesItem(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && addNotesItem()}
+                      className="w-full max-w-md bg-transparent border-none outline-none text-sm text-gray-200 placeholder:text-gray-500 text-center"
+                      placeholder="Type note here..."
+                    />
+                  </div>
+            
                 </div>
               </div>
             </div>
 
             {/* Detailed Description */}
-            <div className="space-y-4 w-full max-w-2xl">
-              <label className="text-sm font-medium text-gray-400 text-center block">Detailed Description</label>
+            <div className="space-y-4 w-full flex flex-col items-center">
+              <div className="text-center">
+                <h3 className="text-lg font-medium text-gray-300 mb-1">Detailed Explanation</h3>
+                <p className="text-sm text-gray-500">Write detailed explanations or multiple solution methods</p>
+              </div>
               
               {/* Method Selection Dropdown */}
               {descriptionItems.length > 0 && (
-                <div className="space-y-2">
-                  <label className="text-xs font-medium text-gray-500">Select Method to View:</label>
-                  <select
-                    value={selectedDescription}
-                    onChange={(e) => setSelectedDescription(e.target.value)}
-                    className="w-full rounded-xl border border-gray-700/50 bg-gray-800/70 px-4 py-3 text-sm text-gray-200 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-                  >
-                    <option value="">-- Select a method --</option>
-                    {descriptionItems.map((item, index) => (
-                      <option key={index} value={item} className="bg-gray-800">
-                        M{index + 1} - {item.substring(0, 50)}{item.length > 50 ? '...' : ''}
-                      </option>
-                    ))}
-                  </select>
+                <div className="space-y-3 w-full max-w-2xl">
+                  <div className="text-center">
+                    <label className="text-sm font-medium text-gray-400 block mb-2">Select Method to View</label>
+                    <select
+                      value={selectedDescription}
+                      onChange={(e) => setSelectedDescription(e.target.value)}
+                      className="w-full max-w-md mx-auto rounded-xl border border-gray-700/50 bg-gray-800/70 px-4 py-3 text-sm text-gray-200 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
+                    >
+                      <option value="">-- Select a method --</option>
+                      {descriptionItems.map((item, index) => (
+                        <option key={index} value={item} className="bg-gray-800">
+                          M{index + 1} - {item.substring(0, 50)}{item.length > 50 ? '...' : ''}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               )}
               
               {/* Description Display/Edit Field */}
-              <div className="min-h-[120px] rounded-xl border border-gray-700/50 bg-gray-800/70 p-4 focus-within:border-purple-500 focus-within:ring-2 focus-within:ring-purple-500/20">
+              <div className="w-full max-w-2xl min-h-[140px] rounded-xl border border-gray-700/50 bg-gray-800/70 p-5 focus-within:border-purple-500 focus-within:ring-2 focus-within:ring-purple-500/20">
                 {selectedDescription ? (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-purple-300">
-                        M{descriptionItems.findIndex(item => item === selectedDescription) + 1} - Selected Method
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-center gap-4">
+                      <span className="text-sm font-medium text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">
+                        Method {descriptionItems.findIndex(item => item === selectedDescription) + 1}
                       </span>
                       <button
                         onClick={() => {
@@ -327,7 +344,8 @@ export default function LeetCodeSubmissionModal({ submission, onClose, onUpdate 
                           removeDescriptionItem(index);
                           setSelectedDescription('');
                         }}
-                        className="text-purple-300 hover:text-red-300 transition-colors"
+                        className="text-purple-300 hover:text-red-300 transition-colors bg-purple-500/10 p-1.5 rounded-lg"
+                        title="Delete this method"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -335,26 +353,27 @@ export default function LeetCodeSubmissionModal({ submission, onClose, onUpdate 
                       </button>
                     </div>
                     <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-700/30">
-                      <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">{selectedDescription}</p>
+                      <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap text-center">{selectedDescription}</p>
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col gap-3 h-full">
-                    <textarea
-                      value={newDescriptionItem}
-                      onChange={(e) => setNewDescriptionItem(e.target.value)}
-                      className="flex-1 bg-transparent border-none outline-none text-sm text-gray-200 placeholder:text-gray-500 resize-none min-h-[80px]"
-                      placeholder="Add detailed explanation or method..."
-                      rows={4}
-                    />
-                    <div className="flex justify-end">
-                      <button
-                        onClick={addDescriptionItem}
-                        className="px-6 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-200 text-sm hover:bg-purple-500/30 transition-colors"
-                      >
-                        Add Method
-                      </button>
+                  <div className="flex flex-col gap-4 h-full items-center justify-center">
+                    <div className="w-full flex justify-center">
+                      <textarea
+                        value={newDescriptionItem}
+                        onChange={(e) => setNewDescriptionItem(e.target.value)}
+                        className="w-full max-w-lg bg-transparent border-none outline-none text-sm text-gray-200 placeholder:text-gray-500 resize-none min-h-[100px] text-center"
+                        placeholder="Write detailed explanation here..."
+                        rows={4}
+                      />
                     </div>
+                    <button
+                      onClick={addDescriptionItem}
+                      disabled={!newDescriptionItem.trim()}
+                      className="px-6 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-200 text-sm hover:bg-purple-500/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Add Method
+                    </button>
                   </div>
                 )}
               </div>
@@ -363,8 +382,8 @@ export default function LeetCodeSubmissionModal({ submission, onClose, onUpdate 
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-800/70 px-10 py-8">
-          <div className="max-w-3xl mx-auto space-y-6">
+        <div className="border-t border-gray-800/70 py-8">
+          <div className="max-w-4xl mx-auto px-8 space-y-6">
             {/* Checkboxes */}
             <div className="flex items-center justify-center gap-8">
               <label className="flex items-center gap-3 text-sm text-gray-400 cursor-pointer hover:text-gray-300 transition-colors">

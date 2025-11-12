@@ -18,6 +18,7 @@ export default function SubmissionTable({ submissions, onSubmissionUpdate }: Sub
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('default');
   const [filterBy, setFilterBy] = useState('all');
+  const [searchActive, setSearchActive] = useState(false);
   const { logout, user } = useAuth();
 
   // Pagination - show only 14 items at a time
@@ -144,39 +145,89 @@ export default function SubmissionTable({ submissions, onSubmissionUpdate }: Sub
           </div>
 
           {/* LeetCode-style search and filters */}
-          <div className="flex items-center space-x-4">
-            <div className="relative flex-1 max-w-md">
-              <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input
-                type="text"
-                placeholder="Search questions"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[#262626] border border-[#404040] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm"
-              />
-            </div>
-            
-            <button className="flex items-center space-x-2 px-3 py-2 bg-[#262626] border border-[#404040] rounded-lg hover:bg-[#333] transition-colors">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-              </svg>
-            </button>
-            
-            <button className="flex items-center space-x-2 px-3 py-2 bg-[#262626] border border-[#404040] rounded-lg hover:bg-[#333] transition-colors">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
-              </svg>
-            </button>
+<div className="flex items-center justify-between w-full space-x-3 bg-[#1e1e1e] p-3 rounded-xl border border-[#333]">
+  {/* Animated Search Bar */}
+  <div className="relative">
+    <button
+      onClick={() => setSearchActive((prev) => !prev)}
+      className="flex items-center justify-center w-10 h-10 bg-[#262626] border border-[#404040] rounded-lg hover:bg-[#333] transition-all"
+    >
+      <svg
+        className="w-5 h-5 text-gray-300"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        />
+      </svg>
+    </button>
+    <input
+      type="text"
+      placeholder="Search questionsssss..."
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      className={`absolute left-12 top-1/2 transform -translate-y-1/2 w-0 opacity-0 transition-all duration-300 ease-in-out bg-[#262626] border border-[#404040] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm py-2 pl-3 pr-4 ${
+        searchActive ? 'w-56 opacity-100' : 'w-0 opacity-0'
+      }`}
+    />
+  </div>
 
-            <div className="flex items-center bg-[#262626] rounded-lg border border-[#404040] text-sm">
-              <span className="text-green-400 px-3 py-1.5 border-r border-[#404040]">
-                {submissions.filter(s => s.questionDetails.difficulty === 'Easy').length}
-              </span>
-              <span className="text-white px-2 py-1.5">419/3744 Solved</span>
-            </div>
-          </div>
+  {/* Buttons */}
+  <div className="flex items-center space-x-2">
+    <button
+      title="Sort"
+      className="flex items-center justify-center w-10 h-10 bg-[#262626] border border-[#404040] rounded-lg hover:bg-[#333] transition-colors"
+    >
+      <svg
+        className="w-5 h-5 text-gray-300"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+        />
+      </svg>
+    </button>
+
+    <button
+      title="Filter"
+      className="flex items-center justify-center w-10 h-10 bg-[#262626] border border-[#404040] rounded-lg hover:bg-[#333] transition-colors"
+    >
+      <svg
+        className="w-5 h-5 text-gray-300"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
+        />
+      </svg>
+    </button>
+  </div>
+
+  {/* Stats Box */}
+  <div className="flex items-center bg-[#262626] rounded-lg border border-[#404040] overflow-hidden text-sm font-medium">
+    <span className="text-green-400 px-3 py-1.5 border-r border-[#404040]">
+      {submissions.filter((s) => s.questionDetails.difficulty === "Easy").length}
+    </span>
+    <span className="text-gray-200 px-3 py-1.5 whitespace-nowrap">
+      419 / 3744 Solved
+    </span>
+  </div>
+</div>
         </div>
       </div>
 
@@ -268,11 +319,6 @@ export default function SubmissionTable({ submissions, onSubmissionUpdate }: Sub
                   />
                 </td>
                 <td className="py-3 px-4">
-                  <button className="w-4 h-4 hover:bg-gray-700 rounded transition-colors">
-                    <svg className="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  </button>
                 </td>
               </tr>
             ))}
